@@ -1,0 +1,47 @@
+const express = require('express');
+const favoriteRouter = express.Router();
+
+// routing chain for favorites
+// root level of favorites
+favoriteRouter.route('/')
+.all((req, res, next) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    next(); // routing moves to next relevant method
+})
+.get((req, res) => {
+    res.end('Will provide the list of favorites');
+})
+.post((req, res) => {
+    res.end(`Will add the favorite: ${req.body.name} with description: ${req.body.description}`);
+})
+.put((req, res) => {
+    res.statusCode = 403;
+    res.end('PUT operation not supported on /favorites');
+})
+// !!restrict access to this later!!
+.delete((req, res) => {
+    res.end('Deleting all favorites');
+});
+favoriteRouter.route('/:favoriteId')
+.all((req, res, next) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+})
+.get((req, res) => {
+    res.statusCode = 403;
+    res.end(`GET operation not supported on /favorites/${req.params.favoriteId}`);
+})
+.post((req, res) => {
+    res.statusCode = 403;
+    res.end(`POST operation not supported on /favorites/${req.params.favoriteId}`);
+})
+.put((req, res) => {
+    res.statusCode = 403;
+    res.end(`PUT operation not supported on /favorites/${req.params.favoriteId}`);
+})
+.delete((req, res) => {
+    res.end(`Deleting favorite: ${req.params.favoriteId}`);
+});
+
+module.exports = favoriteRouter;

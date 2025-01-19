@@ -1,0 +1,47 @@
+const express = require('express');
+const completedRouter = express.Router();
+
+// routing chain for completed
+// root level of completed
+completedRouter.route('/')
+.all((req, res, next) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    next(); // routing moves to next relevant method
+})
+.get((req, res) => {
+    res.end('Will provide the list of completed');
+})
+.post((req, res) => {
+    res.end(`Will add the completed: ${req.body.name} with description: ${req.body.description}`);
+})
+.put((req, res) => {
+    res.statusCode = 403;
+    res.end('PUT operation not supported on /completed');
+})
+// !!restrict access to this later!!
+.delete((req, res) => {
+    res.end('Deleting all completed');
+});
+completedRouter.route('/:completedId')
+.all((req, res, next) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+})
+.get((req, res) => {
+    res.statusCode = 403;
+    res.end(`GET operation not supported on /completed/${req.params.completedId}`);
+})
+.post((req, res) => {
+    res.statusCode = 403;
+    res.end(`POST operation not supported on /completed/${req.params.completedId}`);
+})
+.put((req, res) => {
+    res.statusCode = 403;
+    res.end(`PUT operation not supported on /completed/${req.params.completedId}`);
+})
+.delete((req, res) => {
+    res.end(`Deleting completed: ${req.params.completedId}`);
+});
+
+module.exports = completedRouter;
